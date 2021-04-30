@@ -1,4 +1,4 @@
-// schema represents for specification of graphql api
+// Schema represents for specification of graphql api
 const graphql = require("graphql"); // create graphql object
 // Get graphql oject type from graphql object
 const { GraphQLObjectType, GraphQLID, GraphQLString } = graphql;
