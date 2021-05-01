@@ -3,7 +3,7 @@ const graphql = require("graphql"); // create graphql object
 const Movie = require("../models/movie"); // import Movie model
 const Director = require("../models/director"); // import Director model
 
-// Get graphql oject type from graphql object
+// Get graphql oject types from graphql object
 const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt } = graphql;
 
 // GraphQLObjectType is a format for Type. it enables creating instance.

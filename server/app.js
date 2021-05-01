@@ -10,7 +10,7 @@ mongoose.connect(
   "mongodb+srv://admin:admin@cluster0.hlcut.mongodb.net/test?retryWrites=true&w=majority"
 );
 mongoose.connection.once("open", () => {
-  console.log("db connected");
+    console.log("Connecting to mongoDB ...");
 });
 
 // To create middleware, use use method of app object
