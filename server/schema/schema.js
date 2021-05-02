@@ -38,13 +38,13 @@ const DirectorType = new GraphQLObjectType({
     movies: {
       type: new graphql.GraphQLList(MovieType),
       resolve(parent, args) {
-        return Movie.find({ directorId: parent.id });
+        return Movie.find({ directorId: parent.id }); // Use ".find" for List type method
       },
     },
   }),
 });
 
-// RootQuery : For external accessor
+// RootQuery : For external accessor, Data get dealing system
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -61,6 +61,18 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parents, args) {
         return Director.findById(args.id);
+      },
+    },
+    movies: {
+      type: new GraphQLList(MovieType),
+      resolve(parent, args) {
+        return Movie.find({});
+      },
+    },
+    directors: {
+      type: new GraphQLList(DirectorType),
+      resolve(parent, args) {
+        return Director.find({});
       },
     },
   },
@@ -98,7 +110,6 @@ const Mutation = new GraphQLObjectType({
           name: args.name,
           age: args.age,
         });
-
         return director.save();
       },
     },
