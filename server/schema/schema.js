@@ -4,7 +4,14 @@ const Movie = require("../models/movie"); // import Movie model
 const Director = require("../models/director"); // import Director model
 
 // Get graphql oject types from graphql object
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLInt } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLInt,
+  GraphQLList,
+} = graphql;
 
 // GraphQLObjectType is a format for Type. it enables creating instance.
 const MovieType = new GraphQLObjectType({
@@ -13,6 +20,12 @@ const MovieType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     genre: { type: GraphQLString },
+    director: {
+      type: DirectorType,
+      resolve(parent, args) {
+        return Director.findById(parent.directorId);
+      },
+    },
   }),
 });
 
@@ -22,6 +35,12 @@ const DirectorType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     age: { type: GraphQLInt },
+    movies: {
+      type: new graphql.GraphQLList(MovieType),
+      resolve(parent, args) {
+        return Movie.find({ directorId: parent.id });
+      },
+    },
   }),
 });
 
@@ -56,12 +75,14 @@ const Mutation = new GraphQLObjectType({
       args: {
         name: { type: GraphQLString },
         genre: { type: GraphQLString },
+        directorId: { type: GraphQLID },
       },
       resolve(parent, args) {
         // resolve function: create moive object by using model
         let movie = new Movie({
           name: args.name,
           genre: args.genre,
+          directorId: args.directorId,
         });
         return movie.save();
       },
