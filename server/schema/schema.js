@@ -11,6 +11,7 @@ const {
   GraphQLSchema,
   GraphQLInt,
   GraphQLList,
+  GraphQLNonNull,
 } = graphql;
 
 // GraphQLObjectType is a format for Type. it enables creating instance.
@@ -111,6 +112,40 @@ const Mutation = new GraphQLObjectType({
           age: args.age,
         });
         return director.save();
+      },
+    },
+    updateMovie: {
+      type: MovieType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLString },
+        genre: { type: GraphQLString },
+        direcotrId: { type: GraphQLInt },
+      },
+      resolve(parent, args) {
+        let updateMovie = {};
+        args.name && (updateMovie.name = args.name);
+        args.genre && (updateMovie.genre = args.genre);
+        args.directorId && (updateMovie.directorId = args.directorId);
+        return Movie.findByIdAndUpdate(args.id, updateMovie, {
+          new: true, // If new is true, return value gettable.
+        });
+      },
+    },
+    updateDirector: {
+      type: DirectorType,
+      args: {
+        id: { type: GraphQLNonNull(GraphQLID) },
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+      },
+      resolve(parent, args) {
+        let updateDirector = {};
+        args.name && (updateDirector.name = args.name);
+        args.age && (updateDirector.age = args.age);
+        return Director.findByIdAndUpdate(args.id, updateDirector, {
+          new: true, // If new is true, return value gettable.
+        });
       },
     },
   },
